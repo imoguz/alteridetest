@@ -2,6 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
+import { Suspense } from "react";
 import {
   Form,
   Input,
@@ -16,7 +17,6 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 export default function BuyerApplication() {
   const searchParams = useSearchParams();
@@ -39,7 +39,7 @@ export default function BuyerApplication() {
     console.log("uploadJson", uploadJson);
 
     const uploadedFiles = uploadJson?.data?.fileCreate?.files || [];
-    const fileGids = uploadedFiles.map((f) => f.id);
+    const fileGids = uploadedFiles.map((f) => f.id); // 👈 file id'leri metafield için kullanılır
 
     const metafields = [
       {
