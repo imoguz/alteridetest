@@ -1,26 +1,23 @@
-"use client";
+'use client';
 
-export const dynamic = "force-dynamic";
+import { Button, Checkbox, Form, Input, Typography } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useEffect } from "react";
-import { Button, Checkbox, Form, Input, Typography } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useRouter, useSearchParams } from "next/navigation";
-
-import Link from "next/link";
+import Link from 'next/link';
 
 const { Title } = Typography;
 
 const LoginPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams.get('redirect');
 
   const onFinish = async (values) => {
     try {
       console.log(values);
     } catch (err) {
-      console.error("Login error:", err);
+      console.error('Login error:', err);
     }
   };
 
@@ -40,7 +37,7 @@ const LoginPage = () => {
           <Form.Item
             name="email"
             label="Email"
-            rules={[{ required: true, message: "Please enter your email" }]}
+            rules={[{ required: true, message: 'Please enter your email' }]}
           >
             <Input
               prefix={<UserOutlined />}
@@ -52,7 +49,7 @@ const LoginPage = () => {
           <Form.Item
             name="password"
             label="Password"
-            rules={[{ required: true, message: "Please enter your password" }]}
+            rules={[{ required: true, message: 'Please enter your password' }]}
           >
             <Input.Password
               prefix={<LockOutlined />}
