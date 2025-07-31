@@ -12,9 +12,11 @@ import {
   Button,
   Upload,
   message,
+  Spin,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function BuyerApplication() {
   const searchParams = useSearchParams();
@@ -37,7 +39,7 @@ export default function BuyerApplication() {
     console.log("uploadJson", uploadJson);
 
     const uploadedFiles = uploadJson?.data?.fileCreate?.files || [];
-    const fileGids = uploadedFiles.map((f) => f.id); // 👈 file id'leri metafield için kullanılır
+    const fileGids = uploadedFiles.map((f) => f.id);
 
     const metafields = [
       {
@@ -100,214 +102,226 @@ export default function BuyerApplication() {
   ];
 
   return (
-    <main className="min-h-screen p-8 bg-gray-50">
-      <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-        <h1 className="text-2xl font-bold mb-4">
-          Professional Buyer Application
-        </h1>
+    <Suspense fallback={<Spin />}>
+      <main className="min-h-screen p-8 bg-gray-50">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+          <h1 className="text-2xl font-bold mb-4">
+            Professional Buyer Application
+          </h1>
 
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          initialValues={{
-            servicesProvided: [],
-            hasShowroom: "Yes",
-          }}
-        >
-          <div className="flex gap-4">
-            <Form.Item
-              label="Company Name"
-              name="companyName"
-              rules={[{ required: true, message: "Please enter company name" }]}
-              className="w-full"
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="EIN Number"
-              name="einNumber"
-              rules={[
-                { required: true, message: "Please enter EIN number" },
-                { pattern: /^[0-9]+$/, message: "EIN must be numeric" },
-              ]}
-              className="w-full"
-            >
-              <Input />
-            </Form.Item>
-          </div>
-          <div className="flex gap-4">
-            <Form.Item
-              label="Business Phone Number"
-              name="businessPhone"
-              rules={[
-                { required: true, message: "Please enter business phone" },
-                { pattern: /^[0-9+\-\s()]+$/, message: "Invalid phone format" },
-              ]}
-              className="w-full"
-            >
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Business Type"
-              name="businessType"
-              className="w-full"
-              rules={[
-                { required: true, message: "Please select business type" },
-              ]}
-            >
-              <Select
-                placeholder="Select business type"
-                options={businessType}
-              />
-            </Form.Item>
-          </div>
-
-          <Form.Item
-            label="Company Address"
-            name="companyAddress"
-            rules={[
-              { required: true, message: "Please enter company address" },
-            ]}
-            className="w-full"
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            initialValues={{
+              servicesProvided: [],
+              hasShowroom: "Yes",
+            }}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Services Provided"
-            name="servicesProvided"
-            rules={[
-              {
-                required: true,
-                type: "array",
-                min: 1,
-                message: "Please select at least one service",
-              },
-            ]}
-          >
-            <Checkbox.Group>
-              <Checkbox value="Kitchen Remodeling">Kitchen Remodeling</Checkbox>
-              <Checkbox value="Flooring">Flooring</Checkbox>
-              <Checkbox value="Bathroom Remodeling">
-                Bathroom Remodeling
-              </Checkbox>
-            </Checkbox.Group>
-          </Form.Item>
-
-          <div className="flex gap-4">
-            <Form.Item
-              label="Company Website"
-              name="companyWebsite"
-              rules={[{ type: "url", message: "Invalid URL" }]}
-              className="w-full"
-            >
-              <Input placeholder="https://..." />
-            </Form.Item>
-
-            <Form.Item
-              label="Google Maps Location"
-              name="googleMapsLocation"
-              rules={[{ type: "url", message: "Invalid URL" }]}
-              className="w-full"
-            >
-              <Input placeholder="https://..." />
-            </Form.Item>
-          </div>
-          <div className="flex gap-4">
-            <Form.Item
-              label="Number of Employees"
-              name="numberOfEmployees"
-              rules={[
-                { required: true, message: "Please enter number of employees" },
-              ]}
-              className="w-full"
-            >
-              <InputNumber min={1} className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Average Annual Revenue"
-              name="averageAnnualRevenue"
-              rules={[
-                { required: true, message: "Please select revenue range" },
-              ]}
-              className="w-full"
-            >
-              <Select
-                placeholder="Select revenue range"
-                options={annualRevenue}
+            <div className="flex gap-4">
+              <Form.Item
+                label="Company Name"
+                name="companyName"
+                rules={[
+                  { required: true, message: "Please enter company name" },
+                ]}
                 className="w-full"
-              />
-            </Form.Item>
-          </div>
+              >
+                <Input />
+              </Form.Item>
 
-          <Form.Item
-            label="Do You Have a Showroom?"
-            name="hasShowroom"
-            rules={[{ required: true, message: "Please select an option" }]}
-          >
-            <Radio.Group>
-              <Radio value="Yes">Yes</Radio>
-              <Radio value="No">No</Radio>
-            </Radio.Group>
-          </Form.Item>
+              <Form.Item
+                label="EIN Number"
+                name="einNumber"
+                rules={[
+                  { required: true, message: "Please enter EIN number" },
+                  { pattern: /^[0-9]+$/, message: "EIN must be numeric" },
+                ]}
+                className="w-full"
+              >
+                <Input />
+              </Form.Item>
+            </div>
+            <div className="flex gap-4">
+              <Form.Item
+                label="Business Phone Number"
+                name="businessPhone"
+                rules={[
+                  { required: true, message: "Please enter business phone" },
+                  {
+                    pattern: /^[0-9+\-\s()]+$/,
+                    message: "Invalid phone format",
+                  },
+                ]}
+                className="w-full"
+              >
+                <Input />
+              </Form.Item>
 
-          <Form.Item
-            label="Primary Service Areas"
-            name="primaryServiceAreas"
-            rules={[
-              {
-                required: true,
-                message: "Please enter primary service areas",
-              },
-            ]}
-          >
-            <Input placeholder="e.g. New York, Los Angeles" />
-          </Form.Item>
+              <Form.Item
+                label="Business Type"
+                name="businessType"
+                className="w-full"
+                rules={[
+                  { required: true, message: "Please select business type" },
+                ]}
+              >
+                <Select
+                  placeholder="Select business type"
+                  options={businessType}
+                />
+              </Form.Item>
+            </div>
 
-          <Form.Item
-            label="Supporting Business Documents (PDFs, max 5 files)"
-            name="supportingDocuments"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            rules={[
-              {
-                required: true,
-                message: "Please upload supporting documents",
-              },
-            ]}
-          >
-            <Upload
-              name="files"
-              multiple
-              accept=".pdf"
-              maxCount={5}
-              beforeUpload={(file) => {
-                const isPdf = file.type === "application/pdf";
-                if (!isPdf) {
-                  message.error(`${file.name} is not a PDF file`);
-                }
-                const isLt10M = file.size / 1024 / 1024 < 10;
-                if (!isLt10M) {
-                  message.error(`${file.name} must be smaller than 10MB`);
-                }
-                return isPdf && isLt10M ? true : Upload.LIST_IGNORE;
-              }}
+            <Form.Item
+              label="Company Address"
+              name="companyAddress"
+              rules={[
+                { required: true, message: "Please enter company address" },
+              ]}
+              className="w-full"
             >
-              <Button icon={<UploadOutlined />}>Select File(s)</Button>
-            </Upload>
-          </Form.Item>
+              <Input />
+            </Form.Item>
 
-          <Form.Item className="flex justify-end">
-            <Button type="primary" htmlType="submit">
-              Submit Application
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </main>
+            <Form.Item
+              label="Services Provided"
+              name="servicesProvided"
+              rules={[
+                {
+                  required: true,
+                  type: "array",
+                  min: 1,
+                  message: "Please select at least one service",
+                },
+              ]}
+            >
+              <Checkbox.Group>
+                <Checkbox value="Kitchen Remodeling">
+                  Kitchen Remodeling
+                </Checkbox>
+                <Checkbox value="Flooring">Flooring</Checkbox>
+                <Checkbox value="Bathroom Remodeling">
+                  Bathroom Remodeling
+                </Checkbox>
+              </Checkbox.Group>
+            </Form.Item>
+
+            <div className="flex gap-4">
+              <Form.Item
+                label="Company Website"
+                name="companyWebsite"
+                rules={[{ type: "url", message: "Invalid URL" }]}
+                className="w-full"
+              >
+                <Input placeholder="https://..." />
+              </Form.Item>
+
+              <Form.Item
+                label="Google Maps Location"
+                name="googleMapsLocation"
+                rules={[{ type: "url", message: "Invalid URL" }]}
+                className="w-full"
+              >
+                <Input placeholder="https://..." />
+              </Form.Item>
+            </div>
+            <div className="flex gap-4">
+              <Form.Item
+                label="Number of Employees"
+                name="numberOfEmployees"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter number of employees",
+                  },
+                ]}
+                className="w-full"
+              >
+                <InputNumber min={1} className="w-full" />
+              </Form.Item>
+
+              <Form.Item
+                label="Average Annual Revenue"
+                name="averageAnnualRevenue"
+                rules={[
+                  { required: true, message: "Please select revenue range" },
+                ]}
+                className="w-full"
+              >
+                <Select
+                  placeholder="Select revenue range"
+                  options={annualRevenue}
+                  className="w-full"
+                />
+              </Form.Item>
+            </div>
+
+            <Form.Item
+              label="Do You Have a Showroom?"
+              name="hasShowroom"
+              rules={[{ required: true, message: "Please select an option" }]}
+            >
+              <Radio.Group>
+                <Radio value="Yes">Yes</Radio>
+                <Radio value="No">No</Radio>
+              </Radio.Group>
+            </Form.Item>
+
+            <Form.Item
+              label="Primary Service Areas"
+              name="primaryServiceAreas"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter primary service areas",
+                },
+              ]}
+            >
+              <Input placeholder="e.g. New York, Los Angeles" />
+            </Form.Item>
+
+            <Form.Item
+              label="Supporting Business Documents (PDFs, max 5 files)"
+              name="supportingDocuments"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              rules={[
+                {
+                  required: true,
+                  message: "Please upload supporting documents",
+                },
+              ]}
+            >
+              <Upload
+                name="files"
+                multiple
+                accept=".pdf"
+                maxCount={5}
+                beforeUpload={(file) => {
+                  const isPdf = file.type === "application/pdf";
+                  if (!isPdf) {
+                    message.error(`${file.name} is not a PDF file`);
+                  }
+                  const isLt10M = file.size / 1024 / 1024 < 10;
+                  if (!isLt10M) {
+                    message.error(`${file.name} must be smaller than 10MB`);
+                  }
+                  return isPdf && isLt10M ? true : Upload.LIST_IGNORE;
+                }}
+              >
+                <Button icon={<UploadOutlined />}>Select File(s)</Button>
+              </Upload>
+            </Form.Item>
+
+            <Form.Item className="flex justify-end">
+              <Button type="primary" htmlType="submit">
+                Submit Application
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </main>
+    </Suspense>
   );
 }
